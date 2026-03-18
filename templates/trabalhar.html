@@ -2,116 +2,178 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Quero Trabalhar - Projeto Azul</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quero Trabalhar • Projeto Azul</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #3974cc, #306eb9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            min-height: 100vh;
+            background: #f3f6fb;
         }
 
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            width: 350px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-            text-align: center;
+        .navbar-brand {
+            font-weight: 700;
+            color: #325dc9 !important;
         }
 
-        h1 {
+        .page-header {
+            background: linear-gradient(135deg, #486acf, #4069ca);
+            color: white;
+            padding: 48px 0 36px;
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
             margin-bottom: 8px;
-            color: #216cdd;
         }
 
-        .subtitle {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 25px;
+        .form-card {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
         }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 14px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 14px;
+        .form-label {
+            font-weight: 600;
+            color: #334155;
         }
 
-        input:focus {
-            outline: none;
-            border-color: #0d6efd;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #ff8c00;
+        .btn-azul {
+            background: #355dc2;
             color: white;
             border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 15px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
+            font-weight: 600;
         }
 
-        button:hover {
-            background: #e67e00;
-            transform: translateY(-2px);
+        .btn-azul:hover {
+            background: #2748a8;
+            color: white;
         }
 
-        .voltar {
-            margin-top: 18px;
-        }
-
-        .voltar a {
-            text-decoration: none;
-            color: #555;
-            font-size: 14px;
-        }
-
-        .voltar a:hover {
-            color: #0d6efd;
+        .info-box {
+            background: #eef4ff;
+            border: 1px solid #d7e4ff;
+            color: #35508f;
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-size: 0.95rem;
         }
     </style>
 </head>
-
 <body>
 
-    <div class="container">
-        <h1>Quero Trabalhar</h1>
-        <div class="subtitle">
-            Cadastre seu serviço e apareça para quem precisa
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">Projeto Azul</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuAzul" aria-controls="menuAzul" aria-expanded="false" aria-label="Alternar navegação">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuAzul">
+                <div class="ms-auto d-flex flex-column flex-lg-row gap-2 mt-3 mt-lg-0">
+                    {% if session.get("user_id") %}
+                        <a class="btn btn-outline-primary" href="{{ url_for('contratar') }}">Ver profissionais</a>
+                        <a class="btn btn-outline-danger" href="{{ url_for('logout') }}">Sair</a>
+                    {% else %}
+                        <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Entrar</a>
+                        <a class="btn btn-primary" href="{{ url_for('register') }}">Criar conta</a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
+    </nav>
 
-        <form method="POST">
-            <input type="text" name="nome" placeholder="Nome completo" required>
-            <select name="profissao" required>
-    <option value="">Selecione sua profissão</option>
-    <option>Pedreiro</option>
-    <option>Eletricista</option>
-    <option>Encanador</option>
-    <option>Pintor</option>
-    <option>Faxineira</option>
-    <option>Ajudante Geral</option>
-</select>
-
-            <input type="text" name="whatsapp" placeholder="Telefone / WhatsApp" required>
-
-            <button type="submit">Cadastrar</button>
-        </form>
-
-        <div class="voltar">
-            <a href="/">← Voltar para Home</a>
+    <header class="page-header">
+        <div class="container">
+            <h1>Quero Trabalhar</h1>
+            <p class="mb-0">Cadastre seu serviço e apareça para quem precisa contratar.</p>
         </div>
-    </div>
+    </header>
 
+    <main class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="card form-card">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="mb-4">
+                            <h2 class="h3 mb-2">Cadastro profissional</h2>
+                            <p class="text-muted mb-0">
+                                Preencha seus dados para criar seu perfil no Projeto Azul.
+                            </p>
+                        </div>
+
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                <div class="mb-4">
+                                    {% for category, msg in messages %}
+                                        <div class="alert {% if category == 'success' %}alert-success{% else %}alert-danger{% endif %} mb-2" role="alert">
+                                            {{ msg }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                        <div class="info-box mb-4">
+                            Dica: perfis com foto e localização bem preenchida tendem a transmitir mais confiança.
+                        </div>
+
+                        <form method="POST" enctype="multipart/form-data" class="row g-3">
+                            <div class="col-12">
+                                <label for="nome" class="form-label">Nome completo</label>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex: João da Silva" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="profissao" class="form-label">Profissão</label>
+                                <select class="form-select" id="profissao" name="profissao" required>
+                                    <option value="">Selecione sua profissão</option>
+                                    <option>Pedreiro</option>
+                                    <option>Eletricista</option>
+                                    <option>Encanador</option>
+                                    <option>Pintor</option>
+                                    <option>Faxineira</option>
+                                    <option>Ajudante Geral</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="whatsapp" class="form-label">Telefone / WhatsApp</label>
+                                <input type="text" class="form-control" id="whatsapp" name="whatsapp" placeholder="Ex: 13 99999-9999" required>
+                            </div>
+
+                            <div class="col-md-8">
+                                <label for="cidade" class="form-label">Cidade</label>
+                                <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Ex: Santos" maxlength="80">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="estado" class="form-label">Estado (UF)</label>
+                                <input type="text" class="form-control text-uppercase" id="estado" name="estado" placeholder="Ex: SP" maxlength="2">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="foto" class="form-label">Foto do perfil</label>
+                                <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
+                            </div>
+
+                            <div class="col-12 d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                                <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">Voltar para Home</a>
+                                <button type="submit" class="btn btn-azul px-4">Cadastrar perfil</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

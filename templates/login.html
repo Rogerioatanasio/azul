@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar • Projeto Azul</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: #f3f6fb;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #325dc9 !important;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #486acf, #4069ca);
+            color: white;
+            padding: 48px 0 36px;
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .login-card {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .btn-azul {
+            background: #355dc2;
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-azul:hover {
+            background: #2748a8;
+            color: white;
+        }
+
+        .info-box {
+            background: #eef4ff;
+            border: 1px solid #d7e4ff;
+            color: #35508f;
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">Projeto Azul</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuAzul" aria-controls="menuAzul" aria-expanded="false" aria-label="Alternar navegação">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuAzul">
+                <div class="ms-auto d-flex flex-column flex-lg-row gap-2 mt-3 mt-lg-0">
+                    <a class="btn btn-outline-primary" href="{{ url_for('register') }}">Criar conta</a>
+                    <a class="btn btn-outline-secondary" href="{{ url_for('home') }}">Voltar para home</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Entrar</h1>
+            <p class="mb-0">Acesse sua conta para gerenciar seu perfil profissional.</p>
+        </div>
+    </header>
+
+    <main class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-5">
+                <div class="card login-card">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="mb-4">
+                            <h2 class="h3 mb-2">Login</h2>
+                            <p class="text-muted mb-0">
+                                Entre com seu e-mail e senha para continuar.
+                            </p>
+                        </div>
+
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                <div class="mb-4">
+                                    {% for category, message in messages %}
+                                        <div class="alert {% if category == 'success' %}alert-success{% else %}alert-danger{% endif %} mb-2" role="alert">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                        <div class="info-box mb-4">
+                            Depois do login, você poderá editar seu perfil e acompanhar seu anúncio no Projeto Azul.
+                        </div>
+
+                        <form method="POST" class="row g-3">
+                            <div class="col-12">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="senha" class="form-label">Senha</label>
+                                <input type="password" class="form-control" id="senha" name="senha" required>
+                            </div>
+
+                            <div class="col-12 d-grid mt-2">
+                                <button type="submit" class="btn btn-azul btn-lg">Entrar</button>
+                            </div>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <span class="text-muted">Não tem conta?</span>
+                            <a href="{{ url_for('register') }}" class="fw-semibold text-decoration-none">Cadastre-se</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
